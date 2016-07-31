@@ -5,6 +5,7 @@ import net.java.jinterval.interval.set.SetInterval;
 import net.java.jinterval.interval.set.SetIntervalContext;
 import net.java.jinterval.rational.Rational;
 
+
 public class GradientEvaluator extends AbstractExpressionVisitor {
     final CodeList list;
     final Expression[] results;

@@ -5,6 +5,7 @@ import net.java.jinterval.rational.ExtendedRational;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 
+
 public class Operations {
     public static SetInterval scalarMul(SetInterval[] X, SetInterval[] Y, SetIntervalContext ic) {
         SetInterval result = ic.numsToInterval(0, 0);
@@ -40,7 +41,7 @@ public class Operations {
     }
 
     public static String[] keysReader(String args) {
-        String[] result = new String[args.length()-5];
+        String[] result = new String[args.length() - 5];
         String tmp;
         int keyConuter = 0;
         int i = 0;
@@ -57,7 +58,7 @@ public class Operations {
                 i = j;
                 result[keyConuter] = tmp;
             }
-            if (i!=j)
+            if (i != j)
                 i++;
         }
         return result;

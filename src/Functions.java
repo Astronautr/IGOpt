@@ -1,10 +1,12 @@
 import net.java.jinterval.expression.CodeList;
 import net.java.jinterval.expression.Expression;
 
+
 public class Functions {
     private CodeList list;
     private Expression[] expr;
     private Expression objectiveFunction;
+
     Functions(String[] inps, int exprNum) {
         list = CodeList.create(inps);
         expr = new Expression[exprNum];

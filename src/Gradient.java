@@ -1,22 +1,23 @@
 import net.java.jinterval.interval.set.SetInterval;
 import net.java.jinterval.interval.set.SetIntervalContext;
 import net.java.jinterval.interval.set.SetIntervalContexts;
-import net.java.jinterval.rational.*;
+import net.java.jinterval.rational.ExtendedRational;
+import net.java.jinterval.rational.Rational;
 
 
 public class Gradient {
-/**
- *   Gradient class for interval computing on Java.
- *   With this class you can compute partial derivatives and the range of values for some functions.
- *   Here was used the idea of automatic differentiation.
- *   JInterval library was used for all interval arithmetic and functions.
-*/
+    /**
+     * Gradient class for interval computing on Java.
+     * With this class you can compute partial derivatives and the range of values for some functions.
+     * Here was used the idea of automatic differentiation.
+     * JInterval library was used for all interval arithmetic and functions.
+     */
     private static SetIntervalContext ic; //This field determine accuracy of computing.
     private static int dim; //Represents the number of variables.
+    private static SetInterval ZERO = SetIntervalContexts.getExact().numsToInterval(0, 0);
+    private static SetInterval ONE = SetIntervalContexts.getExact().numsToInterval(1, 1);
     private SetInterval X; //Interval value of expression.
     private SetInterval[] dX; //Interval values of derivative.
-    private static SetInterval ZERO = SetIntervalContexts.getExact().numsToInterval(0,0);
-    private static SetInterval ONE = SetIntervalContexts.getExact().numsToInterval(1,1);
 
     public Gradient() {
         X = null;
@@ -56,7 +57,7 @@ public class Gradient {
         for (int i = 0; i < dim; i++) {
             result.dX[i] = ZERO;
         }
-        result.X = ic.numsToInterval(number,number);
+        result.X = ic.numsToInterval(number, number);
         return result;
     }
 
@@ -66,7 +67,7 @@ public class Gradient {
         for (int i = 0; i < dim; i++) {
             result.dX[i] = ZERO;
         }
-        result.X = ic.numsToInterval(number,number);
+        result.X = ic.numsToInterval(number, number);
         return result;
     }
 
@@ -76,38 +77,42 @@ public class Gradient {
         for (int i = 0; i < dim; i++) {
             result.dX[i] = ZERO;
         }
-        result.X = ic.numsToInterval(number,number);
+        result.X = ic.numsToInterval(number, number);
         return result;
     }
 
-    public static Gradient nums(double lower,double upper) {
+    public static Gradient nums(double lower, double upper) {
         Gradient result = new Gradient();
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
             result.dX[i] = ZERO;
         }
-        result.X = ic.numsToInterval(lower,upper);
+        result.X = ic.numsToInterval(lower, upper);
         return result;
     }
 
-    public static Gradient nums(Rational lower,Rational upper) {
+    public static Gradient nums(Rational lower, Rational upper) {
         Gradient result = new Gradient();
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
             result.dX[i] = ZERO;
         }
-        result.X = ic.numsToInterval(lower,upper);
+        result.X = ic.numsToInterval(lower, upper);
         return result;
     }
 
-    public static Gradient nums(ExtendedRational lower,ExtendedRational upper) {
+    public static Gradient nums(ExtendedRational lower, ExtendedRational upper) {
         Gradient result = new Gradient();
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
             result.dX[i] = ZERO;
         }
-        result.X = ic.numsToInterval(lower,upper);
+        result.X = ic.numsToInterval(lower, upper);
         return result;
+    }
+
+    public static double getDim() {
+        return dim;
     }
 
     public Gradient neg() {
@@ -125,7 +130,7 @@ public class Gradient {
         result.X = ic.intersection(this.X, Y.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.intersection(this.dX[i],Y.dX[i]);
+            result.dX[i] = ic.intersection(this.dX[i], Y.dX[i]);
         }
         return result;
     }
@@ -135,7 +140,7 @@ public class Gradient {
         result.X = ic.intersection(this.X, Y.getX());
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.intersection(this.dX[i],Y.getDX()[i]);
+            result.dX[i] = ic.intersection(this.dX[i], Y.getDX()[i]);
         }
         return result;
     }
@@ -181,7 +186,7 @@ public class Gradient {
         result.X = this.X;
         result.dX = new SetInterval[dim];
         result.dX = this.dX.clone();
-        result.dX[ind] = ic.intersection(this.dX[ind],Y.dX[ind]);
+        result.dX[ind] = ic.intersection(this.dX[ind], Y.dX[ind]);
         return result;
     }
 
@@ -190,7 +195,7 @@ public class Gradient {
         result.X = this.X;
         result.dX = new SetInterval[dim];
         result.dX = this.dX.clone();
-        result.dX[ind] = ic.intersection(this.dX[ind],Y);
+        result.dX[ind] = ic.intersection(this.dX[ind], Y);
         return result;
     }
 
@@ -199,7 +204,7 @@ public class Gradient {
         result.X = this.X;
         result.dX = new SetInterval[dim];
         result.dX = this.dX.clone();
-        result.dX[ind] = ic.intersection(this.dX[ind],Y[ind]);
+        result.dX[ind] = ic.intersection(this.dX[ind], Y[ind]);
         return result;
     }
 
@@ -230,12 +235,12 @@ public class Gradient {
         return result;
     }
 
-    public Gradient max (Gradient Y) {
+    public Gradient max(Gradient Y) {
         Gradient result = new Gradient();
-        result.X = ic.max(this.X,Y.X);
+        result.X = ic.max(this.X, Y.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.max(this.dX[i],Y.dX[i]);
+            result.dX[i] = ic.max(this.dX[i], Y.dX[i]);
         }
         return result;
     }
@@ -256,7 +261,7 @@ public class Gradient {
         result.X = ic.add(this.X, Y.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.add(this.dX[i],Y.dX[i]);
+            result.dX[i] = ic.add(this.dX[i], Y.dX[i]);
         }
         return result;
     }
@@ -266,7 +271,7 @@ public class Gradient {
         result.X = ic.sub(this.X, Y.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.sub(this.dX[i],Y.dX[i]);
+            result.dX[i] = ic.sub(this.dX[i], Y.dX[i]);
         }
         return result;
     }
@@ -276,7 +281,7 @@ public class Gradient {
         result.X = ic.mul(this.X, Y.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.add(ic.mul(this.X, Y.dX[i]),ic.mul(this.dX[i],Y.X));
+            result.dX[i] = ic.add(ic.mul(this.X, Y.dX[i]), ic.mul(this.dX[i], Y.X));
         }
         return result;
     }
@@ -286,7 +291,7 @@ public class Gradient {
         result.X = ic.div(this.X, Y.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.div(ic.sub(ic.mul(this.dX[i], Y.X),ic.mul(this.X,Y.dX[i])),ic.sqr(Y.X));
+            result.dX[i] = ic.div(ic.sub(ic.mul(this.dX[i], Y.X), ic.mul(this.X, Y.dX[i])), ic.sqr(Y.X));
         }
         return result;
     }
@@ -296,7 +301,7 @@ public class Gradient {
         result.X = ic.recip(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.neg(ic.div(this.dX[i],ic.sqr(this.X)));
+            result.dX[i] = ic.neg(ic.div(this.dX[i], ic.sqr(this.X)));
         }
         return result;
     }
@@ -306,7 +311,7 @@ public class Gradient {
         result.X = ic.pow(this.X, Y.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.mul(Y.X, ic.pow(X,ic.sub(Y.X, ONE))),this.dX[i]);
+            result.dX[i] = ic.mul(ic.mul(Y.X, ic.pow(X, ic.sub(Y.X, ONE))), this.dX[i]);
 /*            result.dX[i] = ic.add(ic.mul(ic.mul(ic.pow(this.X,Y.X),Y.dX[i]),ic.log(this.X)),
                     ic.mul(ic.mul(Y.X,this.dX[i]),ic.pow(this.X,ic.sub(Y.X,ONE))));*/
         }
@@ -318,7 +323,7 @@ public class Gradient {
         result.X = ic.pown(this.X, n);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.mul(ic.numsToInterval(n,n), ic.pown(X,n-1)),this.dX[i]);
+            result.dX[i] = ic.mul(ic.mul(ic.numsToInterval(n, n), ic.pown(X, n - 1)), this.dX[i]);
         }
         return result;
     }
@@ -328,29 +333,29 @@ public class Gradient {
         result.X = ic.pown(this.X, n);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.mul(ic.numsToInterval(n,n), ic.pown(X,n-1)),this.dX[i]);
+            result.dX[i] = ic.mul(ic.mul(ic.numsToInterval(n, n), ic.pown(X, n - 1)), this.dX[i]);
         }
         return result;
     }
 
     public Gradient rootn(int n) {
         Gradient result = new Gradient();
-        SetInterval Y = ic.recip(ic.numsToInterval(n,n));
+        SetInterval Y = ic.recip(ic.numsToInterval(n, n));
         result.X = ic.pow(this.X, Y);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.mul(Y, ic.pow(X,ic.sub(Y, ONE))),this.dX[i]);
+            result.dX[i] = ic.mul(ic.mul(Y, ic.pow(X, ic.sub(Y, ONE))), this.dX[i]);
         }
         return result;
     }
 
     public Gradient rootn(long n) {
         Gradient result = new Gradient();
-        SetInterval Y = ic.recip(ic.numsToInterval(n,n));
+        SetInterval Y = ic.recip(ic.numsToInterval(n, n));
         result.X = ic.pow(this.X, Y);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.mul(Y, ic.pow(this.X,ic.sub(Y, ONE))),this.dX[i]);
+            result.dX[i] = ic.mul(ic.mul(Y, ic.pow(this.X, ic.sub(Y, ONE))), this.dX[i]);
         }
         return result;
     }
@@ -360,7 +365,7 @@ public class Gradient {
         result.X = ic.sqr(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.mul(ic.numsToInterval(2,2),X),this.dX[i]);
+            result.dX[i] = ic.mul(ic.mul(ic.numsToInterval(2, 2), X), this.dX[i]);
         }
         return result;
     }
@@ -370,7 +375,7 @@ public class Gradient {
         result.X = ic.sqrt(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.div(dX[i], ic.mul(ic.numsToInterval(2,2),ic.sqrt(X)));
+            result.dX[i] = ic.div(dX[i], ic.mul(ic.numsToInterval(2, 2), ic.sqrt(X)));
         }
         return result;
     }
@@ -380,7 +385,7 @@ public class Gradient {
         result.X = ic.sin(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.cos(X),dX[i]);
+            result.dX[i] = ic.mul(ic.cos(X), dX[i]);
         }
         return result;
     }
@@ -390,7 +395,7 @@ public class Gradient {
         result.X = ic.cos(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.neg(ic.mul(ic.sin(X),dX[i]));
+            result.dX[i] = ic.neg(ic.mul(ic.sin(X), dX[i]));
         }
         return result;
     }
@@ -400,7 +405,7 @@ public class Gradient {
         result.X = ic.tan(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.div(ONE,ic.sqr(ic.cos(X))),dX[i]);
+            result.dX[i] = ic.mul(ic.div(ONE, ic.sqr(ic.cos(X))), dX[i]);
         }
         return result;
     }
@@ -410,7 +415,7 @@ public class Gradient {
         result.X = ic.asin(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.div(ONE,ic.sqrt(ic.sub(ONE,ic.sqr(X)))),dX[i]);
+            result.dX[i] = ic.mul(ic.div(ONE, ic.sqrt(ic.sub(ONE, ic.sqr(X)))), dX[i]);
         }
         return result;
     }
@@ -420,7 +425,7 @@ public class Gradient {
         result.X = ic.acos(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.neg(ic.mul(ic.div(ONE,ic.sqrt(ic.sub(ONE,ic.sqr(X)))),dX[i]));
+            result.dX[i] = ic.neg(ic.mul(ic.div(ONE, ic.sqrt(ic.sub(ONE, ic.sqr(X)))), dX[i]));
         }
         return result;
     }
@@ -430,7 +435,7 @@ public class Gradient {
         result.X = ic.atan(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.div(ONE,ic.add(ONE,ic.sqr(X))),dX[i]);
+            result.dX[i] = ic.mul(ic.div(ONE, ic.add(ONE, ic.sqr(X))), dX[i]);
         }
         return result;
     }
@@ -440,7 +445,7 @@ public class Gradient {
         result.X = ic.exp(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.exp(X),dX[i]);
+            result.dX[i] = ic.mul(ic.exp(X), dX[i]);
         }
         return result;
     }
@@ -450,7 +455,7 @@ public class Gradient {
         result.X = ic.log(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.mul(ic.recip(this.X),this.dX[i]);
+            result.dX[i] = ic.mul(ic.recip(this.X), this.dX[i]);
         }
         return result;
     }
@@ -460,7 +465,7 @@ public class Gradient {
         result.X = ic.log2(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.div(this.dX[i],ic.mul(ic.log(ic.numsToInterval(2,2)),this.X));
+            result.dX[i] = ic.div(this.dX[i], ic.mul(ic.log(ic.numsToInterval(2, 2)), this.X));
         }
         return result;
     }
@@ -470,7 +475,7 @@ public class Gradient {
         result.X = ic.log10(this.X);
         result.dX = new SetInterval[dim];
         for (int i = 0; i < dim; i++) {
-            result.dX[i] = ic.div(this.dX[i],ic.mul(ic.log(ic.numsToInterval(10,10)),this.X));
+            result.dX[i] = ic.div(this.dX[i], ic.mul(ic.log(ic.numsToInterval(10, 10)), this.X));
         }
         return result;
     }
@@ -492,8 +497,6 @@ public class Gradient {
             this.dX[i] = dX[i];
         }
     }
-
-    public static double getDim() {return dim;}
 
     public void show() {
         System.out.println("[" + this.X.doubleInf() + ", " + this.X.doubleSup() + "]");
