@@ -84,10 +84,18 @@ public class Main {
             }
         }
         if ((!argsEmpty) && (args[0].contains(".txt"))) {
+            argsEmpty = true;
+            try {
+                args[1].isEmpty();
+                args[2].isEmpty();
+            }
+            catch (ArrayIndexOutOfBoundsException indOut) {
+                System.err.print("Missing some input arguments.");
+                return;
+            }
             try {
                 BufferedReader fileReader = new BufferedReader(new FileReader(args[0]));
                 String cMode = args[1];
-                System.out.println(cMode);
                 StringBuilder sb = new StringBuilder();
                 for (String s : args) {
                     sb.append(s);

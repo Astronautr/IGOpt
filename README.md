@@ -12,11 +12,11 @@ in Functions.java and some input data placed in txt file (you can enter this dat
 * Number of dependent expressions.  
 
 
-After that you can run IGOpt.sh with input file as script argument, computation modes key and one of keys which set combination
+After that you can run IGOpt.sh (or IGOpt.bat) with input file as script argument, computations mode and one of keys which set combination
 of algorithm modifications.
 
 
-Computation modes provided by JInterval (full name used in command line input):
+Computation modes provided by JInterval(full name used in command line input):
 * -pl (plain);
 * -ac (accur);
 * -t64 (tightest64);
