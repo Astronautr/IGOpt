@@ -48,7 +48,6 @@ public class Main {
             gopt.start(keys);
             System.out.println("Computation time = " + (System.currentTimeMillis() - startTime) / 1E+3 + " sec");
         }
-
     }
 
     public static void main(String[] args) throws IOException {
@@ -56,9 +55,7 @@ public class Main {
         try {
             args[0].isEmpty();
         } catch (ArrayIndexOutOfBoundsException indOut) {
-            if (indOut != null) {
-                argsEmpty = true;
-            }
+            argsEmpty = true;
             System.out.println("Please, enter input data from console.");
             System.out.println();
             BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
@@ -89,27 +86,28 @@ public class Main {
         if ((!argsEmpty) && (args[0].contains(".txt"))) {
             try {
                 BufferedReader fileReader = new BufferedReader(new FileReader(args[0]));
-                String cMode = fileReader.readLine();
+                String cMode = args[1];
+                System.out.println(cMode);
                 StringBuilder sb = new StringBuilder();
                 for (String s : args) {
                     sb.append(s);
                 }
-                sb.delete(0, args[0].length());
+                sb.delete(0, args[0].length() + args[1].length());
                 String[] keys = sb.toString().split("(?=-)");
                 switch (cMode) {
-                    case "plain":
+                    case "-pl":
                         run("plain", SetIntervalContexts.getPlain(), keys, true, fileReader);
                         break;
-                    case "accur":
+                    case "-ac":
                         run("accur", SetIntervalContexts.getAccur64(), keys, true, fileReader);
                         break;
-                    case "tightest64":
+                    case "-t64":
                         run("tightest64", SetIntervalContexts.getTightest64(), keys, true, fileReader);
                         break;
-                    case "exact":
+                    case "-ex":
                         run("exact", SetIntervalContexts.getExact(), keys, true, fileReader);
                         break;
-                    case "dnearest":
+                    case "-dn":
                         run("double nearest", SetIntervalContexts.getDoubleNearest(), keys, true, fileReader);
                         break;
                 }

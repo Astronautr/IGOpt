@@ -23,7 +23,6 @@ public class Algorithm {
     private static GradientEvaluator grEv;
     private static GradientSDEvaluator grSDEv;
     private static GradientMVEvaluator grMVEv;
-    private static Expression obj;
     private static SetInterval[] initialBox;
     private static ExtendedRational tolerance;
     private static ExtendedRational supMin;
@@ -34,7 +33,7 @@ public class Algorithm {
         Functions func = new Functions(inps, exprNum);
         Algorithm.ic = ic;
         rc = ExtendedRationalContexts.mkNearest(BinaryValueSet.BINARY64);
-        obj = func.getObjective();
+        Expression obj = func.getObjective();
         list = obj.getCodeList();
         supMin = ExtendedRational.POSITIVE_INFINITY;
         setEv = SetIntervalEvaluator.create(Algorithm.ic, list, obj);
@@ -43,7 +42,7 @@ public class Algorithm {
         grMVEv = new GradientMVEvaluator(Algorithm.ic, list, obj);
     }
 
-    public Gradient meanValue(SetInterval[] box) {
+    private Gradient meanValue(SetInterval[] box) {
         Gradient grObjective = grEv.evaluate(Gradient.init(box, ic))[0];
         SetInterval[] centralPoint = new SetInterval[box.length];
         SetInterval[] bias = new SetInterval[box.length];
@@ -56,7 +55,7 @@ public class Algorithm {
         return grObjective;
     }
 
-    public GradientMV meanValueSO(SetInterval[] box) {
+    private GradientMV meanValueSO(SetInterval[] box) {
         SetInterval[] centralPoint = new SetInterval[box.length];
         SetInterval[] bias = new SetInterval[box.length];
         for (int i = 0; i < box.length; i++) {
@@ -71,7 +70,7 @@ public class Algorithm {
         return result;
     }
 
-    public SetInterval[] krawczyk(SetInterval[] box, GradientMV grObjective) {
+    private SetInterval[] krawczyk(SetInterval[] box, GradientMV grObjective) {
         boolean isSubPropBox = true;
         for (int i = 0; i < box.length; i++) {
             if (box[i].inf().eq(initialBox[i].inf()) || (box[i].sup().eq(initialBox[i].sup()))) {
@@ -109,7 +108,7 @@ public class Algorithm {
         return box;
     }
 
-    public SetInterval[] monotonyCheck(SetInterval[] box, Gradient result) {
+    private SetInterval[] monotonyCheck(SetInterval[] box, Gradient result) {
         for (int i = 0; i < box.length; i++) {
             if (result.getDX()[i].inf().ge(ExtendedRational.zero())) {
                 box[i] = SetIntervalContexts.getExact().numsToInterval(box[i].sup(), box[i].sup());
@@ -120,7 +119,7 @@ public class Algorithm {
         return box;
     }
 
-    public SetInterval[] monotonyCheck(SetInterval[] box, GradientMV result) {
+    private SetInterval[] monotonyCheck(SetInterval[] box, GradientMV result) {
         for (int i = 0; i < box.length; i++) {
             if (result.getDX()[i].inf().ge(ExtendedRational.zero())) {
                 box[i] = SetIntervalContexts.getExact().numsToInterval(box[i].sup(), box[i].sup());
@@ -131,7 +130,7 @@ public class Algorithm {
         return box;
     }
 
-    public void cleaning(SetInterval result) {
+    private void cleaning(SetInterval result) {
         if (wList.size() > 1) {
             if (supMin.eq(ExtendedRational.POSITIVE_INFINITY) && (result.sup().eq(ExtendedRational.POSITIVE_INFINITY))) {
                 return;
@@ -143,7 +142,7 @@ public class Algorithm {
         }
     }
 
-    public int basicChooseRule(SetInterval[] box) {
+    private int basicChooseRule(SetInterval[] box) {
         int max = 0;
         for (int i = 0; i < box.length; i++) {
             if (box[i].wid().gt(box[max].wid())) {
@@ -153,7 +152,7 @@ public class Algorithm {
         return max;
     }
 
-    public int altChooseRule(SetInterval[] box, SetInterval[] partials) {
+    private int altChooseRule(SetInterval[] box, SetInterval[] partials) {
         if (partials != null) {
             int pMax = 0;
             for (int i = 0; i < partials.length; i++) {
@@ -176,7 +175,7 @@ public class Algorithm {
         }
     }
 
-    void optStep(SetInterval[] box, String[] keys) {
+    private void optStep(SetInterval[] box, String[] keys) {
         if (keys[0].equals("-s")) {
             SetInterval result = setEv.evaluate(box)[0];
             wList.add(new ListElem(box, result.inf(), result.wid(), null));
