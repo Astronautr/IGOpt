@@ -27,13 +27,16 @@ public class Algorithm {
     private static ExtendedRational tolerance;
     private static ExtendedRational supMin;
 
-    Algorithm(SetInterval[] box, SetIntervalContext ic, ExtendedRational tolerance, String[] inps, int exprNum) {
+    Algorithm(SetInterval[] box, SetIntervalContext ic, ExtendedRational tolerance, String[] inps, int exprNum, boolean isLeftBound) {
         initialBox = box.clone();
         Algorithm.tolerance = tolerance;
         Functions func = new Functions(inps, exprNum);
         Algorithm.ic = ic;
         rc = ExtendedRationalContexts.mkNearest(BinaryValueSet.BINARY64);
         Expression obj = func.getObjective();
+        if (isLeftBound) {
+            obj = obj.neg();
+        }
         list = obj.getCodeList();
         supMin = ExtendedRational.POSITIVE_INFINITY;
         setEv = SetIntervalEvaluator.create(Algorithm.ic, list, obj);
@@ -220,7 +223,6 @@ public class Algorithm {
             optStep(fDescendant, keys);
             optStep(sDescendant, keys);
             steps++;
-//            System.out.println("Assessment = " + wList.peek().getAssessment().doubleValue());
         }
         System.out.println("Number of algorithm steps = " + steps);
         System.out.println("Assessment = " + wList.peek().getAssessment().doubleValue());

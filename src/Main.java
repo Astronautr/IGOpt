@@ -22,8 +22,10 @@ public class Main {
             }
             int exprNum = Integer.parseInt(bf.readLine()); //reading number of dependent expressions
 
-            Algorithm gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum);
+            Algorithm gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum, false);
             long startTime = System.currentTimeMillis();
+            gopt.start(keys);
+            gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum, true);
             gopt.start(keys);
             System.out.println("Computation time = " + (System.currentTimeMillis() - startTime) / 1E+3 + " sec");
         } else {
@@ -43,8 +45,10 @@ public class Main {
             System.out.println("Enter the number of dependent expressions");
             int exprNum = Integer.parseInt(bf.readLine());
 
-            Algorithm gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum);
+            Algorithm gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum, false);
             long startTime = System.currentTimeMillis();
+            gopt.start(keys);
+            gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum, true);
             gopt.start(keys);
             System.out.println("Computation time = " + (System.currentTimeMillis() - startTime) / 1E+3 + " sec");
         }
