@@ -29,7 +29,7 @@ public class Main {
             gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum, true);
             goptSup = gopt.start(keys);
             System.out.println("Computation time = " + (System.currentTimeMillis() - startTime) / 1E+3 + " sec");
-            System.out.println("Assessment = [" + goptInf.doubleValue() + ", " + (-goptSup.doubleValue()) + "]." );
+            System.out.println("Estimate of a range = [" + goptInf.doubleValue() + ", " + (-goptSup.doubleValue()) + "]." );
         } else {
             System.out.println("input from console");
             System.out.println("Enter the name of independent variables");
@@ -54,7 +54,7 @@ public class Main {
             gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum, true);
             goptSup = gopt.start(keys);
             System.out.println("Computation time = " + (System.currentTimeMillis() - startTime) / 1E+3 + " sec");
-            System.out.println("Assessment = [" + goptInf.doubleValue() + ", " + (-goptSup.doubleValue()) + "]." );
+            System.out.println("Estimate of a range = [" + goptInf.doubleValue() + ", " + (-goptSup.doubleValue()) + "]." );
         }
     }
 
