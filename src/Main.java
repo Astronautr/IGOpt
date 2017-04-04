@@ -22,12 +22,14 @@ public class Main {
             }
             int exprNum = Integer.parseInt(bf.readLine()); //reading number of dependent expressions
 
+            ExtendedRational goptInf, goptSup;
             Algorithm gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum, false);
             long startTime = System.currentTimeMillis();
-            gopt.start(keys);
+            goptInf = gopt.start(keys);
             gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum, true);
-            gopt.start(keys);
+            goptSup = gopt.start(keys);
             System.out.println("Computation time = " + (System.currentTimeMillis() - startTime) / 1E+3 + " sec");
+            System.out.println("Assessment = [" + goptInf.doubleValue() + ", " + (-goptSup.doubleValue()) + "]." );
         } else {
             System.out.println("input from console");
             System.out.println("Enter the name of independent variables");
@@ -45,12 +47,14 @@ public class Main {
             System.out.println("Enter the number of dependent expressions");
             int exprNum = Integer.parseInt(bf.readLine());
 
+            ExtendedRational goptInf, goptSup;
             Algorithm gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum, false);
             long startTime = System.currentTimeMillis();
-            gopt.start(keys);
+            goptInf = gopt.start(keys);
             gopt = new Algorithm(box, ic, ExtendedRational.valueOf(tolerance), inps, exprNum, true);
-            gopt.start(keys);
+            goptSup = gopt.start(keys);
             System.out.println("Computation time = " + (System.currentTimeMillis() - startTime) / 1E+3 + " sec");
+            System.out.println("Assessment = [" + goptInf.doubleValue() + ", " + (-goptSup.doubleValue()) + "]." );
         }
     }
 

@@ -224,8 +224,6 @@ public class Algorithm {
             optStep(sDescendant, keys);
             steps++;
         }
-        System.out.println("Number of algorithm steps = " + steps);
-        System.out.println("Assessment = " + wList.peek().getAssessment().doubleValue());
         return wList.peek().getAssessment();
     }
 }
